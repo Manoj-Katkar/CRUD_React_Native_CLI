@@ -5,16 +5,17 @@
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import CRUD from './src/screens/crud-screen/crud.screen';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
+      {/* working for android only because of the ip issue android it is working properlly */}
+      <CRUD/>
     </View>
   );
 }
@@ -22,6 +23,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
   },
 });
 
