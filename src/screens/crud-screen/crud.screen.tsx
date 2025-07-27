@@ -8,9 +8,12 @@ import {
   TextInput,
   Pressable,
   Alert,
+  ScrollView,
 } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import useCRUD from './crud.hook';
+import UpdateUser from './componenets/update-user';
+import CreateUser from './componenets/create-user';
 
 const CRUD = () => {
   const {
@@ -31,6 +34,10 @@ const CRUD = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // console.log('Users data updated from CRUD screen:', usersData);
+  }, [usersData]);
 
   const renderEachUser = useCallback(
     ({ item }: any) => {
@@ -78,165 +85,20 @@ const CRUD = () => {
           }}
         />
       </View>
-
+      {/* <ScrollView> */}
       {/* Update the Data  */}
-      <View>
-        <Text style={styles.header}>📝 Update User</Text>
-        {/* Add your update user form here */}
-        <View style={styles.card}>
-          <TextInput
-            placeholder="Enter User ID"
-            style={{
-              borderWidth: 1,
-              borderColor: '#ccc',
-              padding: 10,
-              marginBottom: 10,
-            }}
-            keyboardType="numeric"
-            value={updateFormData.id.toString()}
-            onChangeText={text =>
-              setUpdateFormData((prev: any) => ({
-                ...prev,
-                id: parseInt(text) || '',
-              }))
-            }
-          />
-
-          <TextInput
-            placeholder="Enter User Name"
-            style={{
-              borderWidth: 1,
-              borderColor: '#ccc',
-              padding: 10,
-              marginBottom: 10,
-            }}
-            value={updateFormData.name}
-            onChangeText={text =>
-              setUpdateFormData(prev => ({ ...prev, name: text }))
-            }
-          />
-
-          <TextInput
-            placeholder="Enter User Email"
-            style={{
-              borderWidth: 1,
-              borderColor: '#ccc',
-              padding: 10,
-              marginBottom: 10,
-            }}
-            value={updateFormData.email}
-            onChangeText={text =>
-              setUpdateFormData(prev => ({ ...prev, email: text }))
-            }
-          />
-
-          <Pressable
-            onPress={() => {
-              if (
-                updateFormData.id &&
-                updateFormData.name &&
-                updateFormData.email
-              ) {
-                updateUser(
-                  updateFormData.id,
-                  updateFormData.name,
-                  updateFormData.email,
-                );
-              } else {
-                Alert.alert('Please fill all fields before updating.');
-              }
-            }}
-            style={{
-              backgroundColor: '#1a73e8',
-              padding: 12,
-              borderRadius: 8,
-              marginTop: 10,
-              alignItems: 'center',
-            }}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>
-              Update User
-            </Text>
-          </Pressable>
-        </View>
-      </View>
-
-      <View>
-        <Text style={styles.header}> Create User </Text>
-        {/* Add your create user form here */}
-        <View style={styles.card}>
-                    <TextInput
-            placeholder="Enter User ID"
-            style={{
-              borderWidth: 1,
-              borderColor: '#ccc',
-              padding: 10,
-              marginBottom: 10,
-            }}
-            value={newUserData.id}
-            onChangeText={text =>
-              setNewUserData(prev => ({ ...prev, id: text }))
-            }
-            keyboardType='numeric'
-          />
-          <TextInput
-            placeholder="Enter User Name"
-            style={{
-              borderWidth: 1,
-              borderColor: '#ccc',
-              padding: 10,
-              marginBottom: 10,
-            }}
-            value={newUserData.name}
-            onChangeText={text =>
-              setNewUserData(prev => ({ ...prev, name: text }))
-            }
-          />
-
-          <TextInput
-            placeholder="Enter User Email"
-            style={{
-              borderWidth: 1,
-              borderColor: '#ccc',
-              padding: 10,
-              marginBottom: 10,
-            }}
-            value={newUserData.email}
-            onChangeText={text =>
-              setNewUserData(prev => ({ ...prev, email: text }))
-            }
-          />
-
-          <Pressable
-            onPress={() => {
-              if (newUserData.name && newUserData.email) {
-                // Call your create user function here
-                // For example, createUser(newUserData);
-                console.log('Creating user:', newUserData);
-                createNewUser(
-                  newUserData.id,
-                  newUserData.name,
-                  newUserData.email,
-                );
-                setNewUserData({ id: '', name: '', email: '' }); // Reset form after submission
-              } else {
-                Alert.alert('Please fill all fields before creating.');
-              }
-            }}
-            style={{
-              backgroundColor: '#1a73e8',
-              padding: 12,
-              borderRadius: 8,
-              marginTop: 10,
-              alignItems: 'center',
-            }}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>
-              Create User
-            </Text>
-          </Pressable>
-        </View>
-      </View>
+      <UpdateUser
+        updateUser={updateUser}
+        updateFormData={updateFormData}
+        setUpdateFormData={setUpdateFormData}
+      />
+      {/* create the user form */}
+      <CreateUser
+        newUserData={newUserData}
+        setNewUserData={setNewUserData}
+        createNewUser={createNewUser}
+      />
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -287,7 +149,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   listContent: {
-    paddingBottom: 20,
+    paddingBottom: 60,
   },
   emptyContainer: {
     marginTop: 40,
